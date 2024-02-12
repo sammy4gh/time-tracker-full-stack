@@ -9,11 +9,19 @@ const Home = async () => {
   return (
     <main className="flex flex-col gap-8 py-8 px-20">
       <Toaster />
-      <h1 className="text-4xl font-bold">Clock-it</h1>
-      <TimeLogForm />
-      <Suspense fallback={<TableSkeleton />}>
-        <TimeLogsTable />
-      </Suspense>
+      <div
+        className={
+          "sticky top-0 z-50 bg-white flex flex-col gap-8 border-b py-8"
+        }
+      >
+        <h1 className="text-4xl font-bold">Clock-it</h1>
+        <TimeLogForm />
+      </div>
+      <section className="">
+        <Suspense fallback={<TableSkeleton />}>
+          <TimeLogsTable />
+        </Suspense>
+      </section>
     </main>
   );
 };

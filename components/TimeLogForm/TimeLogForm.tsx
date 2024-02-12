@@ -109,7 +109,7 @@ const TimeLogForm = () => {
           type="text"
           name="name"
           placeholder="What have you worked on?"
-          defaultValue={timeLogState.name}
+          defaultValue={timeLog.name}
         />
 
         <Projects
