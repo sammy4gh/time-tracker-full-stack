@@ -17,7 +17,10 @@ import { deleteTimeLog } from "@/lib/actions/time_tracker_actions";
 import { useToast } from "@/components/ui/use-toast";
 import { revalidatePath } from "next/cache";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { updateTimeLogState } from "@/lib/store/features/time_tracker/timeLogSlice";
+import {
+  updateStatus,
+  updateTimeLogState,
+} from "@/lib/store/features/time_tracker/timeLogSlice";
 import { formatDate, parse } from "date-fns";
 import moment from "moment/moment";
 
@@ -61,7 +64,7 @@ export const timeLogsColumns: ColumnDef<TimeLog>[] = [
       };
 
       const handleDuplicate = (timeLog: TimeLog) => {
-        console.log(timeLog);
+        delete timeLog.id;
         const newTimeLog = {
           ...timeLog,
           date: parse(
@@ -76,6 +79,26 @@ export const timeLogsColumns: ColumnDef<TimeLog>[] = [
             .toDate()
             .toISOString(),
         };
+        dispatch(updateStatus("duplicating"));
+        dispatch(updateTimeLogState(newTimeLog));
+      };
+
+      const handleEdit = (timeLog: TimeLog) => {
+        const newTimeLog = {
+          ...timeLog,
+          date: parse(
+            timeLog.date.toString(),
+            "MMMM do, yyyy",
+            new Date(),
+          ).toISOString(),
+          startTime: moment(timeLog.startTime?.toString(), "HH:mm")
+            .toDate()
+            .toISOString(),
+          endTime: moment(timeLog.endTime?.toString(), "HH:mm")
+            .toDate()
+            .toISOString(),
+        };
+        dispatch(updateStatus("editing"));
         dispatch(updateTimeLogState(newTimeLog));
       };
 
@@ -97,6 +120,10 @@ export const timeLogsColumns: ColumnDef<TimeLog>[] = [
             <DropdownMenuItem onClick={() => handleDuplicate(timeLog)}>
               Duplicate
               <DropdownMenuShortcut>©️</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleEdit(timeLog)}>
+              Edit
+              <DropdownMenuShortcut>✍️</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

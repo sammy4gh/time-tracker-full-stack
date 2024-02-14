@@ -18,8 +18,8 @@ const TimeLogsTable = async () => {
     timeLogs = logs.map((log: TimeLog) => {
       return {
         ...log,
-        startTime: moment(log.startTime).format("HH:mm"),
-        endTime: moment(log.endTime).format("HH:mm"),
+        startTime: moment(log.startTime).format("HH:mm A"),
+        endTime: moment(log.endTime).format("HH:mm A"),
         date: formatDate(new Date(log.date), "PPP"),
       };
     });

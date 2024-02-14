@@ -8,7 +8,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { PopoverContent } from "@/components/ui/popover";
 import { DatePicker } from "@/components/DatePicker/DatePicker";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { createTimeLog, getTimeLogs } from "@/lib/actions/time_tracker_actions";
+import {
+  createTimeLog,
+  getTimeLogs,
+  updateTimeLog,
+} from "@/lib/actions/time_tracker_actions";
 import { Project } from "@/types/project-types";
 import { getProjects } from "@/lib/actions/project-actions";
 import { TimeLog } from "@/types/time_tracker_types";
@@ -21,20 +25,23 @@ import { findProject, taskLogValidationSchema } from "@/lib/helpers";
 import { useFormStatus } from "react-dom";
 
 const today = new Date();
-
+type buttonName = "✍️ Update" | "🚀 Clock-it";
 const TimeLogForm = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [date, setDate] = useState<Date>(today);
   const { toast } = useToast();
-  const timeLog = useAppSelector((state) => state.timeLog);
+  const timeLog = useAppSelector((state) => state.timeLog.timeLog);
+  const status = useAppSelector((state) => state.timeLog.status);
   const [timeLogState, setTimeLogState] = useState(timeLog);
   const [project, setProject] = useState<Project | null>();
   const { pending } = useFormStatus();
   const [isValid, setIsValid] = useState<Boolean>();
+  const [buttonName, setButtonName] = useState<buttonName>("🚀 Clock-it");
 
   const getFormData = (event: FormEvent<HTMLFormElement>): TimeLog => {
     const formData = new FormData(event.currentTarget);
     return {
+      id: timeLog.id,
       name: formData.get("name")?.toString() || "",
       startTime: moment(
         formData.get("startTime")?.toString(),
@@ -48,6 +55,7 @@ const TimeLogForm = () => {
 
   const validateForm = async (data: TimeLog) => {
     try {
+      console.log("data v", data);
       return await taskLogValidationSchema.validate(data);
     } catch (err: any) {
       toast({
@@ -60,8 +68,22 @@ const TimeLogForm = () => {
   };
 
   const submitForm = async (data: TimeLog) => {
+    console.log("submitform", data);
+    let response = null;
     try {
-      const response = await createTimeLog(data);
+      switch (status) {
+        case "editing":
+          console.log("data", data);
+          response = await updateTimeLog(data);
+          break;
+        case "duplicating":
+          delete data.id;
+          response = await createTimeLog(data);
+          break;
+        default:
+          response = await createTimeLog(data);
+          break;
+      }
       toast({
         title: response.title,
         description: response.message,
@@ -76,6 +98,7 @@ const TimeLogForm = () => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = getFormData(event);
+    console.log("formdata", formData);
     try {
       const validatedData = await validateForm(formData);
       await submitForm(validatedData);
@@ -100,6 +123,17 @@ const TimeLogForm = () => {
 
   useEffect(() => {
     setTimeLogState({ ...timeLog });
+    switch (status) {
+      case "editing":
+        setButtonName("✍️ Update");
+        break;
+      case "duplicating":
+        setButtonName("🚀 Clock-it");
+        break;
+      default:
+        setButtonName("🚀 Clock-it");
+        break;
+    }
   }, [timeLog]);
 
   return (
@@ -132,7 +166,7 @@ const TimeLogForm = () => {
           />
         </div>
         <DatePicker setDateFunc={setDate} />
-        <Button>Clock-it ⏰</Button>
+        <Button>{buttonName}</Button>
       </form>
     </div>
   );
