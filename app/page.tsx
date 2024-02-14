@@ -7,11 +7,11 @@ import { Toaster } from "@/components/ui/toaster";
 
 const Home = async () => {
   return (
-    <main className="flex flex-col gap-8 py-8 px-20">
+    <main className="flex flex-col gap-8 px-20">
       <Toaster />
       <div
         className={
-          "sticky top-0 z-50 bg-white flex flex-col gap-8 border-b py-8"
+          "sticky top-0 z-50 bg-white flex flex-col gap-8 border-b pb-8"
         }
       >
         <h1 className="text-4xl font-bold">Clock-it</h1>
