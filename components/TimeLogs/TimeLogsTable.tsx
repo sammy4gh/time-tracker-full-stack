@@ -1,11 +1,11 @@
 import React from "react";
 import { TimeLog } from "@/types/time_tracker_types";
-import { Project } from "@/types/project-types";
+import { Project } from "@/types/project_types";
 import { getTimeLogs } from "@/lib/actions/time_tracker_actions";
 import moment from "moment";
 import { formatDate } from "date-fns";
 import { timeLogsColumns } from "@/components/TimeLogs/TimeLogsColumns";
-import { TimeLogsDataTable } from "@/components/TimeLogs/TimeLogsDataTable";
+import { DataTable } from "@/components/ui/data-table";
 
 const TimeLogsTable = async () => {
   let timeLogs: TimeLog[] = [];
@@ -26,12 +26,7 @@ const TimeLogsTable = async () => {
   } catch (error) {
     console.error(error);
   }
-  return (
-    <TimeLogsDataTable
-      columns={timeLogsColumns}
-      data={timeLogs}
-    ></TimeLogsDataTable>
-  );
+  return <DataTable columns={timeLogsColumns} data={timeLogs}></DataTable>;
 };
 
 export default TimeLogsTable;

@@ -20,12 +20,10 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="en">
         <body className={inter.className}>
-          <main className="grid lg:grid-cols-5 overflow-auto">
+          <main className="grid lg:grid-cols-7 overflow-auto">
             <Sidebar className={"hidden lg:block"} />
             <section
-              className={
-                "col-span-3 lg:col-span-4  ml-40 lg:border-l absolute right-3"
-              }
+              className={"col-span-3 lg:col-span-6 h-screen lg:border-l  "}
             >
               {children}
             </section>

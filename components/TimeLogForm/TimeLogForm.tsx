@@ -3,7 +3,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Categories from "@/components/Categories/Categories";
-import Projects from "@/components/Projects/Projects";
+import ProjectsDropdown from "@/components/Projects/ProjectsDropdown";
 import { Calendar } from "@/components/ui/calendar";
 import { PopoverContent } from "@/components/ui/popover";
 import { DatePicker } from "@/components/DatePicker/DatePicker";
@@ -13,8 +13,8 @@ import {
   getTimeLogs,
   updateTimeLog,
 } from "@/lib/actions/time_tracker_actions";
-import { Project } from "@/types/project-types";
-import { getProjects } from "@/lib/actions/project-actions";
+import { Project } from "@/types/project_types";
+import { getProjects } from "@/lib/actions/project_actions";
 import { TimeLog } from "@/types/time_tracker_types";
 import { formatDate } from "date-fns";
 import moment from "moment/moment";
@@ -146,7 +146,7 @@ const TimeLogForm = () => {
           defaultValue={timeLog.name}
         />
 
-        <Projects
+        <ProjectsDropdown
           projects={projects}
           selectedProjectFunc={setProject}
           projectId={timeLogState.projectId}

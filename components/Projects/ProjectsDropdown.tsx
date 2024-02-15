@@ -10,8 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { getProjects } from "@/lib/actions/project-actions";
-import { Project } from "@/types/project-types";
+import { getProjects } from "@/lib/actions/project_actions";
+import { Project } from "@/types/project_types";
 import { findProject } from "@/lib/helpers";
 
 type ProjectsProps = {
@@ -20,7 +20,7 @@ type ProjectsProps = {
   projectId: number;
 };
 
-const Projects = ({
+const ProjectsDropdown = ({
   projects,
   selectedProjectFunc,
   projectId,
@@ -39,7 +39,7 @@ const Projects = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{project?.name || "Projects"}</Button>
+        <Button variant="outline">{project?.name || "ProjectsDropdown"}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Projects</DropdownMenuLabel>
@@ -62,7 +62,7 @@ const Projects = ({
   );
 };
 
-export default Projects;
+export default ProjectsDropdown;
 
 const ProjectList = [
   {

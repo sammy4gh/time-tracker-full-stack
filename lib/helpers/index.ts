@@ -1,4 +1,4 @@
-import { Project } from "@/types/project-types";
+import { Project } from "@/types/project_types";
 import * as Yup from "yup";
 
 export const findProject = (
